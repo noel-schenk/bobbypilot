@@ -1,0 +1,7 @@
+<h2>Test Training</h2>
+<div class='direction'>
+	<button (click)='direction = DirectionTypes.left' class="uk-button">Left</button>
+	<button (click)='direction = DirectionTypes.straight' class="uk-button">Straight</button>
+	<button (click)='direction = DirectionTypes.right' class="uk-button">Right</button>
+</div>
+<span class='currentDirection'>Current Direction: <u>{{ DirectionTypes[direction] }}</u></span>

@@ -1,0 +1,32 @@
+$boxColor: #95ecff;
+:host {
+	display: block;
+	position: relative;
+	border-color: $boxColor;
+}
+h2 {
+	font-size: var(--font-size-h2);
+	font-family: var(--font-family-h2);
+	background-color: $boxColor;
+	color: white;
+	position: absolute;
+    padding: 4px 10px 14px 10px;
+    top: 0;
+    left: 0;
+	width: 100%;
+}
+h3 {
+	margin: 0 0 20px 0;
+    color: white;
+    background: $boxColor;
+    padding: 4px 8px;
+    display: table;
+}
+hr {
+	border-color: $boxColor;
+}
+progress {
+	&::-webkit-progress-value {
+		background: $boxColor;
+	}
+}

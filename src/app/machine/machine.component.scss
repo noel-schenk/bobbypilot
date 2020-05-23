@@ -1,0 +1,17 @@
+$boxColor: #4a2f58;
+:host {
+	display: block;
+	position: relative;
+	border-color: $boxColor;
+}
+h2 {
+	font-size: var(--font-size-h2);
+	font-family: var(--font-family-h2);
+	background-color: $boxColor;
+	color: white;
+	position: absolute;
+    padding: 4px 10px 14px 10px;
+    top: 0;
+    left: 0;
+	width: 100%;
+}

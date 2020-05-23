@@ -1,0 +1,55 @@
+$size: 120px;
+$innerPadding: 10px;
+$visibleDegree: 10deg;
+$backgroundCircleColor: #95ecff;
+$backgroundCircleIndicatorColor: #f8f8f8;
+$overlaySizeAddition: -2px;
+$overlaySize: $size+$overlaySizeAddition;
+
+:host {
+	position: relative;
+	height: $size;
+	width: $size;
+	transition: transform 0.4s ease-in-out;
+	display: block;
+}
+
+.backgroundCircle,
+.indicator,
+.indicatorOverlay {
+	top: 0;
+	left: 0;
+	height: $size;
+	width: $size;
+	position: absolute;
+	border-radius: 50%;
+	clip: rect(0px, $size/2, $size, 0px);
+	background: $backgroundCircleIndicatorColor;
+	transform: rotate(180deg - $visibleDegree);
+}
+
+.indicatorOverlay,
+.backgroundCircle {
+	top: -$overlaySizeAddition/2;
+	left: -$overlaySizeAddition/2;
+	background: $backgroundCircleColor;
+	transform: rotate(180deg + $visibleDegree);
+	height: $overlaySize;
+	width: $overlaySize;
+	clip: rect(0px, $overlaySize/2, $overlaySize, 0px);
+}
+
+.backgroundCircle {
+	background: $backgroundCircleColor;
+	clip: auto;
+}
+
+.innerCircle {
+	position: absolute;
+	top: $innerPadding;
+	left: $innerPadding;
+	height: $size - $innerPadding * 2;
+	width: $size - $innerPadding * 2;
+	background: white;
+	border-radius: 50%;
+}

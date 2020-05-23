@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { CameraService } from '../camera.service';
 
 @Component({
@@ -11,14 +11,14 @@ export class CameraSelectorComponent implements OnInit {
 	stream: MediaStream;
 
 	@ViewChild('cameraPreview')
-	cameraPreview: any;
+	cameraPreview: ElementRef<HTMLVideoElement>;
 
 	constructor(private cameraService: CameraService) { }
 
 	ngOnInit() {
 		navigator.mediaDevices.enumerateDevices().then(devices => {
 			this.cameraDevices = devices.filter(device => device.kind == 'videoinput');
-			console.log(this.cameraDevices);
+			this.selectCamera(this.cameraDevices[0]);
 		});
 	}
 
@@ -31,6 +31,7 @@ export class CameraSelectorComponent implements OnInit {
 			.getUserMedia(constraints)
 			.then(stream => {
 				this.cameraService.stream = stream;
+				this.cameraService.cameraPreview = this.cameraPreview.nativeElement;
 				this.cameraPreview.nativeElement.srcObject = stream;
 			})
 			.catch(error => {

@@ -7,19 +7,28 @@ import { CameraSelectorComponent } from './camera-selector/camera-selector.compo
 import { RouterModule } from '@angular/router';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { ControllerComponent } from './controller/controller.component';
+import { CarInfoComponent } from './car-info/car-info.component';
+import { SteeringIndicatorComponent } from './steering-indicator/steering-indicator.component';
+import { TestTrainingComponent } from './test-training/test-training.component';
+import { MachineComponent } from './machine/machine.component';
+import { MlService } from './ml.service';
 
 @NgModule({
 	declarations: [
 		AppComponent,
 		CameraSelectorComponent,
 		DashboardComponent,
-		ControllerComponent
+		ControllerComponent,
+		CarInfoComponent,
+		SteeringIndicatorComponent,
+		TestTrainingComponent,
+		MachineComponent
 	],
 	imports: [
 		BrowserModule,
 		AppRoutingModule,
 		RouterModule.forRoot([
-			{path: '', component: DashboardComponent},
+			{path: '', component: DashboardComponent, resolve: {myData: MlService}},
 		])
 	],
 	providers: [],

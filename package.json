@@ -19,10 +19,12 @@
     "@angular/platform-browser": "~9.1.7",
     "@angular/platform-browser-dynamic": "~9.1.7",
     "@angular/router": "~9.1.7",
+    "@tensorflow-models/knn-classifier": "^1.2.2",
+    "@tensorflow-models/mobilenet": "^2.0.4",
     "@tensorflow/tfjs": "^2.0.0-rc.4",
     "@types/uikit": "^3.3.0",
     "component": "^1.1.0",
-    "rxjs": "~6.5.4",
+    "rxjs": "^6.5.5",
     "tslib": "^1.10.0",
     "uikit": "^3.4.6",
     "zone.js": "~0.10.2"

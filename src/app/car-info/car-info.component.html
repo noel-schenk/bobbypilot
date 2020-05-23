@@ -1,0 +1,6 @@
+<h2>Car Info</h2>
+<h3>Steering Indicator</h3>
+<app-steering-indicator #steeringIndicator angle='{{ angle.get }}'></app-steering-indicator>
+<hr>
+<h3>Speed Indicator</h3>
+<progress #speedIndicator class="uk-progress" value='{{ speed.get }}' max='{{ maxSpeed }}'></progress>
