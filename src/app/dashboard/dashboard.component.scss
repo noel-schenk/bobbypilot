@@ -1,0 +1,34 @@
+@function rnd($elements...) {
+	@return nth($elements, random(length($elements)))
+}
+
+:host {
+	display: flex;
+	justify-content: space-around;
+	flex-wrap: wrap;
+}
+:host > * {
+	border-width: 10px;
+	border-style: solid;
+	padding: 70px 20px 80px 20px;
+}
+:host > *.tiny {
+	width: 200px;
+	height: 200px;
+}
+:host > *.small {
+	width: 300px;
+	height: 300px;
+}
+:host > *.medium {
+	width: 400px;
+	height: 400px;
+}
+:host > *.big {
+	width: 500px;
+	height: 500px;
+}
+:host > *.huge {
+	width: 600px;
+	height: 600px;
+}

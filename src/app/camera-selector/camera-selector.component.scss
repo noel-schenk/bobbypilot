@@ -1,0 +1,30 @@
+$boxColor: #7AC2B1;
+:host {
+	display: block;
+	position: relative;
+	border-color: $boxColor;
+}
+h2 {
+	font-size: var(--font-size-h2);
+	font-family: var(--font-family-h2);
+	background-color: $boxColor;
+	color: white;
+	position: absolute;
+    padding: 4px 10px 14px 10px;
+    top: 0;
+    left: 0;
+	width: 100%;
+}
+video {
+	object-fit: contain;
+	object-position: center;
+    height: 100%;
+    width: 100%;
+}
+button {
+	margin: 0 auto;
+	position: absolute;
+	left: 20px;
+	bottom: 20px;
+	right: 20px;
+}

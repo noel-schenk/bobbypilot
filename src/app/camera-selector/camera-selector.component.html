@@ -1,0 +1,17 @@
+<h2>Camera Selector</h2>
+<video #cameraPreview autoplay poster='assets/poster/camera-preview.jpg'></video>
+<div>
+	<button class='uk-button' type='button'>Select camera</button>
+	<div uk-dropdown='mode: click'>
+		<ul class='uk-nav uk-dropdown-nav'>
+			<ng-container *ngFor='let cameraDevice of cameraDevices; index as i'>
+				<li>
+					<a (click)='selectCamera(cameraDevice)'>
+						{{ cameraDevice.label ? cameraDevice.label : 'not defined' }}
+					</a>
+				</li>
+				<li *ngIf='cameraDevices.length - 1 > i' class='uk-nav-divider'></li>
+			</ng-container>
+		</ul>
+	</div>
+</div>
