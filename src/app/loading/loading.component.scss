@@ -1,0 +1,44 @@
+img {
+	transform: scale(0);
+	position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    margin: auto;
+    object-fit: contain;
+    display: table;
+    max-width: calc( 100% - 40px );
+    max-height: 100%;
+    width: 100%;
+    animation: logo 2s ease-in-out 0.8s forwards;
+}
+
+.loadingBar {
+	position: fixed;
+    bottom: 0;
+	left: 0;
+	right: 0;
+    height: 40px;
+    background: #da6262;
+	width: 0;
+	animation: loadingBar 4s ease-in-out 0s forwards;
+}
+
+@keyframes logo {
+	0% {
+		transform: scale(0);
+	}
+	100% {
+		transform: scale(1);
+	}
+}
+
+@keyframes loadingBar {
+	0% {
+		width: 0;
+	}
+	100% {
+		width: 100%;
+	}
+}

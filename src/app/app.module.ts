@@ -4,7 +4,7 @@ import { NgModule } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { CameraSelectorComponent } from './camera-selector/camera-selector.component';
-import { RouterModule } from '@angular/router';
+import { RouterModule, RouterEvent } from '@angular/router';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { ControllerComponent } from './controller/controller.component';
 import { CarInfoComponent } from './car-info/car-info.component';
@@ -14,6 +14,7 @@ import { MachineComponent } from './machine/machine.component';
 import { MlService } from './ml.service';
 import { FileUploadComponent } from './file-upload/file-upload.component';
 import { FileDownloadComponent } from './file-download/file-download.component';
+import { LoadingComponent } from './loading/loading.component';
 
 @NgModule({
 	declarations: [
@@ -26,7 +27,8 @@ import { FileDownloadComponent } from './file-download/file-download.component';
 		TestTrainingComponent,
 		MachineComponent,
 		FileUploadComponent,
-		FileDownloadComponent
+		FileDownloadComponent,
+		LoadingComponent
 	],
 	imports: [
 		BrowserModule,
@@ -38,4 +40,4 @@ import { FileDownloadComponent } from './file-download/file-download.component';
 	providers: [],
 	bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {}

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { MlService } from '../ml.service';
+import { MlService, ClassifierTypes } from '../ml.service';
 
 @Component({
 	selector: 'app-test-training',
@@ -11,7 +11,7 @@ export class TestTrainingComponent implements OnInit {
 	
 	set direction(direction: Direction) {
 		this._direction = direction;
-		this.MlService.train(this._direction);
+		this.MlService.train(this._direction, ClassifierTypes.straight);
 	}
 
 	get direction() {

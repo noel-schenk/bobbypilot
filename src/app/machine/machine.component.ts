@@ -12,10 +12,13 @@ export class MachineComponent implements OnInit {
 
 	DirectionTypes = Direction;
 
-	constructor(private MlService:MlService) {}
+	constructor(private mlService:MlService) {}
 
 	ngOnInit() {
-		this.MlService.machineComponent = this;
+		this.mlService.prediction.straight.subscribe(prediction => {
+			this.direction = prediction as any as number;
+		})
+		 
 	}
 
 }
