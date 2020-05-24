@@ -12,6 +12,8 @@ import { SteeringIndicatorComponent } from './steering-indicator/steering-indica
 import { TestTrainingComponent } from './test-training/test-training.component';
 import { MachineComponent } from './machine/machine.component';
 import { MlService } from './ml.service';
+import { FileUploadComponent } from './file-upload/file-upload.component';
+import { FileDownloadComponent } from './file-download/file-download.component';
 
 @NgModule({
 	declarations: [
@@ -22,7 +24,9 @@ import { MlService } from './ml.service';
 		CarInfoComponent,
 		SteeringIndicatorComponent,
 		TestTrainingComponent,
-		MachineComponent
+		MachineComponent,
+		FileUploadComponent,
+		FileDownloadComponent
 	],
 	imports: [
 		BrowserModule,

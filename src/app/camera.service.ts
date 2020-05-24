@@ -6,15 +6,14 @@ import { MlService } from './ml.service';
 })
 export class CameraService {
 	stream: MediaStream;
-	_cameraPreview = document.createElement('video');
+	device: MediaDeviceInfo;
+	videoElement:HTMLVideoElement;
 
-	set cameraPreview(cameraPreview) {
-		this._cameraPreview = cameraPreview;
-		this.MlService.webcam = this._cameraPreview;
-	}
-
-	get cameraPreview() {
-		return this._cameraPreview;
+	setCamera(stream: MediaStream, device: MediaDeviceInfo, videoElement: HTMLVideoElement) {
+		this.stream = stream;
+		this.device = device;
+		this.videoElement = videoElement;
+		this.MlService.setWebcam(this.videoElement, this.device.deviceId)
 	}
 	constructor(private MlService:MlService) { }
 }
