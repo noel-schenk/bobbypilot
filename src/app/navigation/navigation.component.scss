@@ -1,0 +1,29 @@
+$boxColor: #4264fb;
+:host {
+	display: block;
+	position: relative;
+	border-color: $boxColor;
+	overflow: hidden;
+}
+h2 {
+	font-size: var(--font-size-h2);
+	font-family: var(--font-family-h2);
+	background-color: $boxColor;
+	color: white;
+	position: absolute;
+    padding: 4px 10px 14px 10px;
+    top: 0;
+    left: 0;
+	width: 100%;
+	z-index: 100;
+}
+.map {
+	position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+	height: 100%;
+	z-index: 50;
+}

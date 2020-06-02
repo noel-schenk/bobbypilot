@@ -1,0 +1,489 @@
+let ttt = y.controlTransferIn({ // req and rec 7
+        requestType: 'class',
+        recipient: 'interface',
+        request: 0x20,
+        value: 0x0000,
+        index: 0x0000
+    }, new Uint8Array([128,37,0,0,0,0,8]))
+        .then(result => {
+            console.log(result);
+            let decoder = new TextDecoder()
+            console.log(decoder.decode(result.data));
+            console.log('sent req');
+        }).catch(error => {
+            console.log(error);
+        });
+
+let tttt = y.controlTransferOut({
+        requestType: 'class',
+        recipient: 'interface',
+        request: 0x20,
+        value: 0x0000,
+        index: 0x0000
+    }, new Uint8Array([128,37,0,0,0,0,8]))
+        .then(result => {
+            console.log(result);
+            let decoder = new TextDecoder()
+            console.log(decoder.decode(result.data));
+            console.log('sent req');
+        }).catch(error => {
+            console.log(error);
+        });
+
+let ttttt = y.controlTransferOut({
+        requestType: 'class',
+        recipient: 'interface',
+        request: 0x20,
+        value: 0x0000,
+        index: 0x0000
+    }, new Uint8Array([0,150,0,0,0,0,8]))
+        .then(result => {
+            console.log(result);
+            let decoder = new TextDecoder()
+            console.log(decoder.decode(result.data));
+            console.log('sent req');
+        }).catch(error => {
+            console.log(error);
+        });
+
+ttt
+tttt
+ttt
+ttt
+ttttt
+
+at requests
+
+
+
+
+//init
+
+let y;
+let x;
+navigator.usb.requestDevice({
+    filters: [{}]
+}).then((selectedDevice) => {
+    device = selectedDevice;
+    x = selectedDevice;
+    return device.open()
+        .then(() => device.reset())
+        .then(() => device.selectConfiguration(1))
+        .then(() => device.claimInterface(device.configuration.interfaces[0].interfaceNumber))
+        .then(() => {
+			y = device;
+			testing();
+        })
+});
+
+function co(reqAndRecTypeNumber, request, value, index, decData) {
+	let requestType = '';
+	let recipient = '';
+	switch(reqAndRecTypeNumber) {
+		case 0x00 :
+			requestType = 'standard',
+			recipient = 'device'
+		break;
+		case 0x21 :
+			requestType = 'class',
+			recipient = 'interface'
+		break;
+		case 0x40 :
+			requestType = 'vendor',
+			recipient = 'device'
+		break;
+	}
+	let transferRequest;
+	if (decData) {
+		transferRequest = y.controlTransferOut({
+			requestType: requestType,
+			recipient: recipient,
+			request: request,
+			value: value,
+			index: index
+		}, new Uint8Array(decData));
+		transferRequest.then(result => {
+				console.log(result);
+				let decoder = new TextDecoder()
+				console.log(decoder.decode(result.data));
+				console.log('sent req');
+			}).catch(error => {
+				console.log(error);
+			});
+		return transferRequest;
+	}
+	else {
+		transferRequest = y.controlTransferOut({
+			requestType: requestType,
+			recipient: recipient,
+			request: request,
+			value: value,
+			index: index
+		});
+		transferRequest.then(result => {
+				console.log(result);
+				let decoder = new TextDecoder()
+				console.log(decoder.decode(result.data));
+				console.log('sent req');
+			}).catch(error => {
+				console.log(error);
+			});
+		return transferRequest;
+	}
+	
+}
+
+function ci(reqAndRecTypeNumber, request, value, index, length) {
+	let requestType = '';
+	let recipient = '';
+	switch(reqAndRecTypeNumber) {
+		case 0xa1 :
+			requestType = 'class',
+			recipient = 'interface'
+		break;
+		case 0xc0 :
+			requestType = 'vendor',
+			recipient = 'device'
+		break;
+		case 0x80 :
+			requestType = 'standard',
+			recipient = 'device'
+		break;
+	}
+	const transferRequest = y.controlTransferIn({
+		requestType: requestType,
+		recipient: recipient,
+		request: request,
+		value: value,
+		index: index
+	}, length)
+	transferRequest.then(result => {
+			console.log(result);
+			let decoder = new TextDecoder()
+			console.log(decoder.decode(result.data));
+			console.log('sent req');
+		}).catch(error => {
+			console.log(error);
+		});
+	return transferRequest;
+}
+
+function bo(endpointNumber, data) {
+	const transferRequest =  y.transferOut(endpointNumber, data)
+	transferRequest.then(result => {
+		console.log(result);
+	}).catch(error => {
+		console.log(error);
+	});
+	return transferRequest;
+}
+
+function bi(endpointNumber, length) {
+	const transferRequest =  y.transferIn(endpointNumber, length)
+	transferRequest.then(result => {
+		console.log(result);
+	}).catch(error => {
+		console.log(error);
+	});
+	return transferRequest;
+}
+
+function ii(endpointNumber, length) {
+	const transferRequest = y.transferIn(endpointNumber, length);
+	transferRequest.then(result => {
+		console.log(result);
+	}).catch(error => {
+		console.log(error);
+	});
+	return transferRequest;
+}
+
+function stringToAT(string) {
+	return new TextEncoder().encode('AT' + string + '\r');
+}
+
+async function getData() {
+	bi(3, 256).then(res => {
+		console.warn('biRes: ', new TextDecoder("ascii").decode(res.data));
+		if(res) {
+			this.getData();
+		} else {
+			debugger;
+		}
+	});
+}
+
+function sleep(ms) {
+	return new Promise(resolve => setTimeout(resolve, ms));
+  }
+  
+
+
+// ffff9e024d8e0cc0 2871730143 S             Co:                               1:         028:          0        s      40                  01        0008    0000  0000   0
+// address          timestampp SendOrReceive ControlOrNot(big)direction(small) bus number device number endpoint status reqAndRecTypeNumber 0xrequest 0xvalue index length lenght but weird
+
+async function testing() {
+	let res;
+
+
+
+	res = await ci(0x80, 0x06, 0x0100, 0x0000, 0x0012);
+	console.log('initRes100: ', res);
+
+	res = await ci(0x80, 0x06, 0x0200, 0x0000, 0x0009);
+	console.log('initRes101: ', res);
+
+	res = await ci(0x80, 0x06, 0x0200, 0x0000, 0x0027); //check this
+	console.log('initRes102: ', res);
+
+	res = await ci(0x80, 0x06, 0x0300, 0x0000, 0x00ff);
+	console.log('initRes103: ', res);
+
+	res = await ci(0x80, 0x06, 0x0302, 0x0409, 0x00ff);
+	console.log('initRes104: ', res);
+
+	res = await ci(0x80, 0x06, 0x0301, 0x0409, 0x00ff);
+	console.log('initRes105: ', res);
+
+	res = await co(0x00, 0x09, 0x0001, 0x0000);
+	console.log('initRes106: ', res);
+
+	res = await ci(0xc0, 0x01, 0x8484, 0x0000, 0x0001);
+	console.log('initRes107: ', res);
+
+	res = await co(0x40, 0x01, 0x0404, 0x0000);
+	console.log('initRes108: ', res);
+
+	res = await ci(0xc0, 0x01, 0x8484, 0x0000, 0x0001);
+	console.log('initRes109: ', res);
+
+	res = await ci(0xc0, 0x01, 0x8383, 0x0000, 0x0001);
+	console.log('initRes110: ', res);
+
+	res = await ci(0xc0, 0x01, 0x8484, 0x0000, 0x0001);
+	console.log('initRes111: ', res);
+
+	res = await co(0x40, 0x01, 0x0404, 0x0001);
+	console.log('initRes112: ', res);
+
+	res = await ci(0xc0, 0x01, 0x8484, 0x0000, 0x0001);
+	console.log('initRes113: ', res);
+
+	res = await ci(0xc0, 0x01, 0x8383, 0x0000, 0x0001);
+	console.log('initRes114: ', res);
+
+	res = await co(0x40, 0x01, 0x0000, 0x0001);
+	console.log('initRes115: ', res);
+
+	res = await co(0x40, 0x01, 0x0001, 0x0000);
+	console.log('initRes116: ', res);
+
+	res = await co(0x40, 0x01, 0x0002, 0x0044);
+	console.log('initRes117: ', res);
+
+	res = await ci(0x80, 0x06, 0x03ee, 0x0000, 0x0400);
+	console.log('initRes118: ', res);
+
+	res = await ci(0x80, 0x06, 0x03ee, 0x0000, 0x0400);
+	console.log('initRes119: ', res);
+
+
+
+
+
+	res = await co(0x40, 0x01, 0x0000, 0x00c1);
+	
+	res = await co(0x40, 0x01, 0x0008, 0x0000);
+	console.log('coRes1: ', res);
+
+	res = await co(0x40, 0x01, 0x0009, 0x0000);
+	console.log('coRes2: ', res);
+
+	res = await ci(0xa1, 0x21, 0x0000, 0x0000, 0x007);
+	console.log('ciRes get current baud and databits setting: ', res);
+
+	res = await co(0x21, 0x20, 0x0000, 0x00000, [128,37,0,0,0,0,8])
+	console.log('coRes init baud and databits: ', res);
+
+	res = await ci(0xc0, 0x01, 0x0080, 0x000, 0x001);
+	console.log('ciRes check again if correct init then get c0: ', res);
+
+	res = await co(0x40, 0x01, 0x0000, 0x00c1);
+
+	ii(1, 10).then(res => {
+		console.log('iiRes: ', res);
+		ii(1, 10).then(res => {
+			console.log('iiRes: ', res);
+			ii(1, 10).then(res => {
+				console.log('iiRes: ', res);
+			});
+		});
+	});
+
+	getData();
+
+	res = await co(0x21, 0x22, 0x0003, 0x0000);
+	console.log('coRes3: ', res);
+
+	res = await ci(0xa1, 0x21, 0x0000, 0x0000, 0x0007);
+	console.log('ciRes1: ', res);
+
+	res = await ci(0xc0, 0x01, 0x0080, 0x0000, 0x0001);
+	console.log('ciRes2: ', res);
+
+	res = await co(0x40, 0x01, 0x0000, 0x0001);
+	console.log('coRes4: ', res);
+
+	res = await ci(0xa1, 0x21, 0x0000, 0x0000, 0x0007);
+	console.log('cuRes3: ', res);
+
+	res = await co(0x21, 0x20, 0x0000, 0x0000, [0,150,0,0,0,0,8]);
+	console.log('coRes5: ', res);
+
+	res = await ci(0xc0, 0x01, 0x0080, 0x0000, 0x0001);
+	console.log('ciRes3: ', res);
+
+	res = await co(0x40, 0x01, 0x0000, 0x0001);
+	console.log('coRes6: ', res);
+
+	await sleep(2000);
+
+	res = await bo(2, stringToAT('I'));
+	console.log('ATI: ', res);
+
+	await sleep(2000);
+
+	res = await bo(2, stringToAT('SP0'));
+	console.log('ATSP0: ', res);
+
+	await sleep(2000);
+
+	res = await bo(2, stringToAT('MA'));
+	console.log('ATMA: ', res);
+	
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+ffff89bf99961180 1902988675 S Bi:1:032:3 -115 256 <
+
+ffff89bf99961b40 1904858000 S Bo:1:032:2 -115 3 = 415449
+ffff89bf99961b40 1904858084 C Bo:1:032:2 0 3 >
+
+ffff89bf99961480 1904858628 C Bi:1:032:3 0 1 = 41
+ffff89bf99961480 1904858637 S Bi:1:032:3 -115 256 <
+ffff89bf99961180 1904858918 C Bi:1:032:3 0 1 = 54
+ffff89bf99961180 1904858924 S Bi:1:032:3 -115 256 <
+ffff89bf99961480 1904859175 C Bi:1:032:3 0 1 = 49
+ffff89bf99961480 1904859179 S Bi:1:032:3 -115 256 <
+
+
+
+ffff89bfc2fbfd80 3794114801 S Co:1:023:0 s 40 01 0000 00c1 0000 0
+ffff89bfc2fbfd80 3794114843 C Co:1:023:0 0 0
+
+
+00960000 000008
+
+
+ffff89c0c204b9c0 3794116632 S Co:1:023:0 s 40 01 0000 0001 0000 0
+ffff89c0c204b9c0 3794116688 C Co:1:023:0 0 0
+
+
+
+ffff89bfc2fbfd80 3794114992 S Ci:1:023:0 s a1 21 0000 0000 0007 7 <
+ffff89bfc2fbfd80 3794115050 C Ci:1:023:0 0 7 = 80250000 000008
+
+
+ffff89bfc2fbfd80 3794114992 S Ci:1:023:0 s a1 21 0000 0000 0007 7 <
+
+
+
+
+
+ffff89bffb664480 3794114873 S Ii:1:023:1 -115:1 10 <
+
+ffff89bd2fc6fb40 4062258388 S Ci:1:024:0 s c0 01 0080 0000 0001 1 <
+ffff89bd2fc6fb40 4062258426 C Ci:1:024:0 0 1 = 01
+ffff89bd2fc6fb40 4062258432 S Co:1:024:0 s 40 01 0000 0001 0000 0
+ffff89bd2fc6fb40 4062258466 C Co:1:024:0 0 0
+
+
+
+ffff89bd2fc6fb40 4062258086 S Co:1:024:0 s 21 22 0003 0000 0000 0
+ffff89bd2fc6fb40 4062258125 C Co:1:024:0 0 0
+
+
+ffff89c0c1cc9180 2793865723 S Co:1:020:0 s 40 01 0000 00c1 0000 0
+ffff89c0c1cc9180 2793865757 C Co:1:020:0 0 0
+
+
+
+
+
+
+
+
+
+
+
+ffff89bfaeb11480 459819888 S Co:1:015:0 s 40 01 0008 0000 0000 0
+ffff89bfaeb11480 459819927 C Co:1:015:0 0 0
+ffff89bfaeb11480 459819934 S Co:1:015:0 s 40 01 0009 0000 0000 0
+ffff89bfaeb11480 459819966 C Co:1:015:0 0 0
+ffff89c02e9f6300 459819975 S Ci:1:015:0 s a1 21 0000 0000 0007 7 <
+ffff89c02e9f6300 459820019 C Ci:1:015:0 0 7 = 80250000 000008
+
+
+
+
+
+
+
+
+ffff89bfaeb11900 459820576 S Ci:1:015:0 s c0 01 0080 0000 0001 1 <
+ffff89bfaeb11900 459820616 C Ci:1:015:0 0 1 = 01
+
+ffff89c02e9f6300 459820025 S Co:1:015:0 s 21 20 0000 0000 0007 7 = 80250000 000008
+
+ffff89bf80a68c00 3368977857 S Bi:1:013:3 -115 256 <
+
+ffff89c0dc0f4b40 3205797248 S Co:1:011:0 s 40 01 0009 0000 0000 0
+ffff89c0dc0f4b40 3205797312 C Co:1:011:0 0 0
+ffff89bf71ac53c0 3205800586 S Ci:1:011:0 s a1 21 0000 0000 0007 7 <
+ffff89bf71ac53c0 3205800767 C Ci:1:011:0 0 7 = 80250000 000000
+ffff89bf71ac53c0 3205806002 S Co:1:011:0 s 21 20 0000 0000 0007 7 = 80250000 000008
+ffff89bf71ac53c0 3205806084 C Co:1:011:0 0 7 >
+ffff89bf71ac53c0 3205815431 S Ci:1:011:0 s c0 01 0080 0000 0001 1 <
+ffff89bf71ac53c0 3205815511 C Ci:1:011:0 0 1 = 00
+ffff89bf71ac5000 3205819492 S Bo:1:011:2 -115 4 = 4154490d
+ffff89bf71ac5000 3205819556 C Bo:1:011:2 0 4 >
+ffff89c07f233840 3205824037 S Bi:1:011:3 -115 256 <
+
+ffff9e0248e9c6c0 2874026330 S Bo:1:028:2 -115 4 = 4154490d
+ffff9e0248e9c6c0 2874026381 C Bo:1:028:2 0 4 >
+ffff9e01d233bb40 2874026936 C Bi:1:028:3 0 1 = 41
+ffff9e01d233bb40 2874026967 S Bi:1:028:3 -115 256 <
+ffff9e013f3a7300 2874027237 C Bi:1:028:3 0 1 = 54
+ffff9e013f3a7300 2874027265 S Bi:1:028:3 -115 256 <
+ffff9e01d233bb40 2874027490 C Bi:1:028:3 0 1 = 49
+
+
+
+ffff89bf99961900 762268653 S Bo:1:009:2 -115 4 = 4154490d
+ffff89bf99961900 762268714 C Bo:1:009:2 0 4 >
+ffff89bf999619c0 762269348 C Bi:1:009:3 0 1 = 41
+
+
+
+ffff9e00cb450840 2871731001 S Ci:1:028:0 s c0 01 0080 0000 0001 1 <

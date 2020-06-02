@@ -15,6 +15,7 @@ import { MlService } from './ml.service';
 import { FileUploadComponent } from './file-upload/file-upload.component';
 import { FileDownloadComponent } from './file-download/file-download.component';
 import { LoadingComponent } from './loading/loading.component';
+import { NavigationComponent } from './navigation/navigation.component';
 
 @NgModule({
 	declarations: [
@@ -28,7 +29,8 @@ import { LoadingComponent } from './loading/loading.component';
 		MachineComponent,
 		FileUploadComponent,
 		FileDownloadComponent,
-		LoadingComponent
+		LoadingComponent,
+		NavigationComponent
 	],
 	imports: [
 		BrowserModule,
