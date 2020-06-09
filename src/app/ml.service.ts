@@ -30,7 +30,7 @@ export class MlService implements Resolve<any> {
 	}
 
 	setWebcam(videoElement: HTMLVideoElement, deviceId: string) {
-		tf.data.webcam(videoElement, { deviceId: deviceId, facingMode: 'undefined' as any }).then(webcamIterator => {
+		tf.data.webcam(videoElement, { deviceId: deviceId, facingMode: 'environment' }).then(webcamIterator => {
 			this.webcamIterator = webcamIterator;
 		});
 	}
