@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { CameraService } from './camera.service';
 import * as tf from '@tensorflow/tfjs';
+import * as tfc from '@tensorflow/tfjs-core';
 import * as knnClassifier from '@tensorflow-models/knn-classifier';
 import * as mobilenet from '@tensorflow-models/mobilenet';
 import { Direction } from './test-training/test-training.component';
@@ -15,6 +16,7 @@ import Utils from './utils';
 import { FileUploadService } from './file-upload.service';
 import UIkit from 'uikit';
 import { stringify } from 'querystring';
+import { StorageService, StorageDataTypes } from './storage.service';
 
 @Injectable({
 	providedIn: 'root'
@@ -41,7 +43,7 @@ export class MlService implements Resolve<any> {
 	prediction: { [key in ClassifierTypes]: Subject<string> }
 
 
-	constructor(private fileUploadService: FileUploadService) {
+	constructor(private fileUploadService: FileUploadService, private storageService: StorageService) {
 		this.init();
 	}
 
@@ -116,7 +118,7 @@ export class MlService implements Resolve<any> {
 		}
 	}
 
-	async save() {
+	getDatasets() {
 		const datasets = new Array();
 		Object.keys(this.classifiers).forEach(key => {
 			const classifier: knnClassifier.KNNClassifier = this.classifiers[key];
@@ -129,23 +131,42 @@ export class MlService implements Resolve<any> {
 			});
 			datasets.push({ key: key, dataset: dataset });
 		});
+		return datasets;
+	}
+
+	loadDatasets(datasetsToLoad: string) {
+		let datasets = new Array<{ key: string, dataset: Array<TensorData> }>();
+		datasets = JSON.parse(datasetsToLoad);
+		datasets.forEach(dataset => {
+			let tensorDataArr = dataset.dataset;
+			let classDatasetMatrices: { [label: string]: tf.Tensor2D } = {};
+			tensorDataArr.forEach(tensorData => {
+				classDatasetMatrices[tensorData.key] = tf.tensor2d(tensorData.values, tensorData.shape, tensorData.dtype);
+			});
+			this.classifiers[dataset.key].setClassifierDataset(classDatasetMatrices);
+			UIkit.notification(`Loaded model [${dataset.key}]`, 'success');
+		});
+	}
+
+	async save() {
+		const datasets = this.getDatasets();
 		Utils.downloadObjectAsJson(datasets, Utils.getTimestamp() + '_classifierDataset_bobbypilot');
 	}
 
 	async load() {
 		this.fileUploadService.fileLoaded.subscribe(file => {
-			let datasets = new Array<{ key: string, dataset: Array<TensorData> }>();
-			datasets = JSON.parse(file);
-			datasets.forEach(dataset => {
-				let tensorDataArr = dataset.dataset;
-				let classDatasetMatrices: { [label: string]: tf.Tensor2D } = {};
-				tensorDataArr.forEach(tensorData => {
-					classDatasetMatrices[tensorData.key] = tf.tensor2d(tensorData.values, tensorData.shape, tensorData.dtype);
-				});
-				this.classifiers[dataset.key].setClassifierDataset(classDatasetMatrices);
-				UIkit.notification(`Loaded model [${dataset.key}]`, 'success');
-			});
+			this.loadDatasets(file);
 		});
+	}
+
+	async localSave() {
+		const datasets = this.getDatasets();
+		this.storageService.save(StorageDataTypes.model, JSON.stringify(datasets));
+	}
+
+	async localLoad() {
+		const datasets = this.storageService.load(StorageDataTypes.model);
+		this.loadDatasets(datasets);
 	}
 
 	getClassifierByType(type: ClassifierTypes) {

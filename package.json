@@ -19,6 +19,7 @@
     "@angular/platform-browser": "~9.1.7",
     "@angular/platform-browser-dynamic": "~9.1.7",
     "@angular/router": "~9.1.7",
+    "@angular/service-worker": "~9.1.7",
     "@tensorflow-models/knn-classifier": "^1.2.2",
     "@tensorflow-models/mobilenet": "^2.0.4",
     "@tensorflow/tfjs": "^2.0.0-rc.4",

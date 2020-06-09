@@ -17,6 +17,9 @@ import { FileDownloadComponent } from './file-download/file-download.component';
 import { LoadingComponent } from './loading/loading.component';
 import { NavigationComponent } from './navigation/navigation.component';
 import { TrafficLightTrainingComponent } from './traffic-light-training/traffic-light-training.component';
+import { QuickSaveComponent } from './quick-save/quick-save.component';
+import { ServiceWorkerModule } from '@angular/service-worker';
+import { environment } from '../environments/environment';
 
 @NgModule({
 	declarations: [
@@ -32,14 +35,16 @@ import { TrafficLightTrainingComponent } from './traffic-light-training/traffic-
 		FileDownloadComponent,
 		LoadingComponent,
 		NavigationComponent,
-		TrafficLightTrainingComponent
+		TrafficLightTrainingComponent,
+		QuickSaveComponent
 	],
 	imports: [
 		BrowserModule,
 		AppRoutingModule,
 		RouterModule.forRoot([
 			{path: '', component: DashboardComponent, resolve: {myData: MlService}},
-		])
+		]),
+		ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
 	],
 	providers: [],
 	bootstrap: [AppComponent]
