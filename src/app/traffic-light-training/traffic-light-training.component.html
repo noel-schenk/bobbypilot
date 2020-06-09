@@ -1,0 +1,7 @@
+<h2>Traffic Light Training</h2>
+<div class='direction'>
+	<button (click)='trafficLight = TrafficLightTypes.red' class="uk-button">Red</button>
+	<button (click)='trafficLight = TrafficLightTypes.yellow' class="uk-button">Yellow</button>
+	<button (click)='trafficLight = TrafficLightTypes.green' class="uk-button">Green</button>
+</div>
+<span class='currentDirection'>Current Direction: <u>{{ TrafficLightTypes[trafficLight] }}</u></span>

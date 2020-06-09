@@ -10,6 +10,7 @@ import { Subject } from 'rxjs';
 import { AstMemoryEfficientTransformer } from '@angular/compiler';
 import { async } from '@angular/core/testing';
 import { tensor2d, Tensor2D, TypedArray } from '@tensorflow/tfjs';
+import { WebcamIterator } from '@tensorflow/tfjs-data/dist/iterators/webcam_iterator';
 import Utils from './utils';
 import { FileUploadService } from './file-upload.service';
 import UIkit from 'uikit';
@@ -22,10 +23,14 @@ export class MlService implements Resolve<any> {
 	classifiers: { [key in ClassifierTypes]: knnClassifier.KNNClassifier };
 	net: mobilenet.MobileNet;
 
-	webcamIterator: any;
+	webcamIterator: WebcamIterator;
+
+	getWebcam() {
+		return this.webcamIterator;
+	}
 
 	setWebcam(videoElement: HTMLVideoElement, deviceId: string) {
-		tf.data.webcam(videoElement, { deviceId: deviceId }).then(webcamIterator => {
+		tf.data.webcam(videoElement, { deviceId: deviceId, facingMode: 'undefined' as any }).then(webcamIterator => {
 			this.webcamIterator = webcamIterator;
 		});
 	}
@@ -43,7 +48,11 @@ export class MlService implements Resolve<any> {
 	async init() {
 		await this.loadClassifiers();
 		await this.loadPredictions();
-		this.net = await mobilenet.load();
+		this.net = await mobilenet.load({
+			version: 2,
+			alpha: 1,
+			modelUrl: '/assets/model/mobilenet_v2_1.0_224/model.json'
+		});
 		this.predict(ClassifierTypes.straight);
 		this.load();
 
@@ -56,7 +65,8 @@ export class MlService implements Resolve<any> {
 			turn_right: knnClassifier.create(),
 			turn_left: knnClassifier.create(),
 			straight: knnClassifier.create(),
-			speed: knnClassifier.create()
+			speed: knnClassifier.create(),
+			traffic_light: knnClassifier.create()
 		};
 	}
 
@@ -66,18 +76,20 @@ export class MlService implements Resolve<any> {
 			turn_right: new Subject(),
 			turn_left: new Subject(),
 			straight: new Subject(),
-			speed: new Subject()
+			speed: new Subject(),
+			traffic_light: new Subject()
 		};
 		this.predict(ClassifierTypes.turn_right);
 		this.predict(ClassifierTypes.turn_left);
 		this.predict(ClassifierTypes.straight);
 		this.predict(ClassifierTypes.speed);
+		this.predict(ClassifierTypes.traffic_light);
 	}
 
 	async train(value: string, type: ClassifierTypes) {
 		const classifier = this.getClassifierByType(type);
-		if (this.webcamIterator) {
-			const img: tf.Tensor3D = await this.webcamIterator.capture();
+		if (this.getWebcam()) {
+			const img: tf.Tensor3D = await (this.getWebcam() as WebcamIterator).capture();
 			const activation = this.net.infer(img, true);
 
 			classifier.addExample(activation, value);
@@ -90,8 +102,8 @@ export class MlService implements Resolve<any> {
 	async predict(type: ClassifierTypes) {
 		const classifier = this.getClassifierByType(type);
 		while (true) {
-			if (classifier.getNumClasses() > 0 && this.webcamIterator) {
-				const img = await this.webcamIterator.capture();
+			if (classifier.getNumClasses() > 0 && this.getWebcam()) {
+				const img = await (this.getWebcam() as WebcamIterator).capture();
 				const activation = (this.net.infer as any)(img, 'conv_preds');
 
 				const result = await classifier.predictClass(activation);
@@ -155,5 +167,5 @@ export class TensorData {
 }
 
 export enum ClassifierTypes {
-	turn_right = 'turn_right', turn_left = 'turn_left', straight = 'straight', speed = 'speed',
+	turn_right = 'turn_right', turn_left = 'turn_left', straight = 'straight', speed = 'speed', traffic_light = 'traffic_light',
 }

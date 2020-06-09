@@ -16,6 +16,7 @@ import { FileUploadComponent } from './file-upload/file-upload.component';
 import { FileDownloadComponent } from './file-download/file-download.component';
 import { LoadingComponent } from './loading/loading.component';
 import { NavigationComponent } from './navigation/navigation.component';
+import { TrafficLightTrainingComponent } from './traffic-light-training/traffic-light-training.component';
 
 @NgModule({
 	declarations: [
@@ -30,7 +31,8 @@ import { NavigationComponent } from './navigation/navigation.component';
 		FileUploadComponent,
 		FileDownloadComponent,
 		LoadingComponent,
-		NavigationComponent
+		NavigationComponent,
+		TrafficLightTrainingComponent
 	],
 	imports: [
 		BrowserModule,

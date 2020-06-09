@@ -1,0 +1,31 @@
+$boxColor: #9b81d8;
+:host {
+	display: block;
+	position: relative;
+	border-color: $boxColor;
+}
+h2 {
+	font-size: var(--font-size-h2);
+	font-family: var(--font-family-h2);
+	background-color: $boxColor;
+	color: white;
+	position: absolute;
+    padding: 4px 10px 14px 10px;
+    top: 0;
+    left: 0;
+	width: 100%;
+}
+.direction {
+	display: flex;
+	justify-content: space-around;
+}
+.currentDirection {
+	font-size: 20px;
+    text-transform: uppercase;
+    text-align: center;
+    display: block;
+    margin: 40px 0;
+    color: white;
+    background: $boxColor;
+    padding: 10px 0;
+}

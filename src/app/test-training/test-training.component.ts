@@ -11,7 +11,7 @@ export class TestTrainingComponent implements OnInit {
 	
 	set direction(direction: Direction) {
 		this._direction = direction;
-		this.MlService.train(this._direction, ClassifierTypes.straight);
+		this.MlService.train(this._direction.toString(), ClassifierTypes.straight);
 	}
 
 	get direction() {
