@@ -68,7 +68,8 @@ export class MlService implements Resolve<any> {
 			turn_left: knnClassifier.create(),
 			straight: knnClassifier.create(),
 			speed: knnClassifier.create(),
-			traffic_light: knnClassifier.create()
+			traffic_light: knnClassifier.create(),
+			traffic_sign: knnClassifier.create()
 		};
 	}
 
@@ -79,13 +80,15 @@ export class MlService implements Resolve<any> {
 			turn_left: new Subject(),
 			straight: new Subject(),
 			speed: new Subject(),
-			traffic_light: new Subject()
+			traffic_light: new Subject(),
+			traffic_sign: new Subject()
 		};
 		this.predict(ClassifierTypes.turn_right);
 		this.predict(ClassifierTypes.turn_left);
 		this.predict(ClassifierTypes.straight);
 		this.predict(ClassifierTypes.speed);
 		this.predict(ClassifierTypes.traffic_light);
+		this.predict(ClassifierTypes.traffic_sign);
 	}
 
 	async train(value: string, type: ClassifierTypes) {
@@ -188,5 +191,10 @@ export class TensorData {
 }
 
 export enum ClassifierTypes {
-	turn_right = 'turn_right', turn_left = 'turn_left', straight = 'straight', speed = 'speed', traffic_light = 'traffic_light',
+	turn_right = 'turn_right',
+	turn_left = 'turn_left',
+	straight = 'straight',
+	speed = 'speed',
+	traffic_light = 'traffic_light',
+	traffic_sign = 'traffic_sign',
 }

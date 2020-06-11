@@ -30,8 +30,12 @@ export class CameraSelectorComponent implements OnInit {
 		navigator.mediaDevices
 			.getUserMedia(constraints)
 			.then(stream => {
-				this.cameraPreview.nativeElement.srcObject = stream;
-				this.cameraService.setCamera(stream, cameraDevice, this.cameraPreview.nativeElement);
+				try {
+					this.cameraPreview.nativeElement.srcObject = stream;
+					this.cameraService.setCamera(stream, cameraDevice, this.cameraPreview.nativeElement);
+				} catch (error) {
+					console.error(error);
+				}
 			})
 			.catch(error => {
 				console.error(error);

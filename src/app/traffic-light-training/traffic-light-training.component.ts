@@ -8,7 +8,7 @@ import { MlService, ClassifierTypes } from '../ml.service';
 })
 export class TrafficLightTrainingComponent implements OnInit {
 
-	_trafficLight = TrafficLightTypes.red;
+	_trafficLight = TrafficLightTypes.none;
 	TrafficLightTypes = TrafficLightTypes;
 
   constructor(private MlService: MlService) { }
@@ -28,5 +28,5 @@ export class TrafficLightTrainingComponent implements OnInit {
 }
 
 export enum TrafficLightTypes {
-	red, yellow, green
+	red, yellow, green, none
 }

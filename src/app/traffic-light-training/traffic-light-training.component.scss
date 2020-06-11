@@ -17,6 +17,7 @@ h2 {
 }
 .direction {
 	display: flex;
+	flex-wrap: wrap;
 	justify-content: space-around;
 }
 .currentDirection {

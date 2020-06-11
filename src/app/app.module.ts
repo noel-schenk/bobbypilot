@@ -20,6 +20,7 @@ import { TrafficLightTrainingComponent } from './traffic-light-training/traffic-
 import { QuickSaveComponent } from './quick-save/quick-save.component';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
+import { TrafficSignsTrainingComponent } from './traffic-signs-training/traffic-signs-training.component';
 
 @NgModule({
 	declarations: [
@@ -36,7 +37,8 @@ import { environment } from '../environments/environment';
 		LoadingComponent,
 		NavigationComponent,
 		TrafficLightTrainingComponent,
-		QuickSaveComponent
+		QuickSaveComponent,
+		TrafficSignsTrainingComponent
 	],
 	imports: [
 		BrowserModule,

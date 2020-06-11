@@ -36,6 +36,10 @@ export default class Utils {
 			pad2(date.getSeconds());
 	}
 
+	static getArrayOfEnumValues(enumObject: any) {
+		return Object.keys(enumObject).filter((type) => isNaN(<any>type) && type !== 'values').map(x => x.valueOf());
+	}
+
 }
 
 export class byRef<T>{

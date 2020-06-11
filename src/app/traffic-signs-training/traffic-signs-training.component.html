@@ -1,0 +1,9 @@
+<h2>Traffic Signs Training</h2>
+<button class="uk-button uk-button-default" type="button">Traffic Sign Type 274</button>
+<div uk-dropdown>
+    <ul class="uk-nav uk-dropdown-nav">
+        <li *ngFor='let trafficSignType274 of TrafficSignTypes274'>
+			<a (click)='s274 = trafficSignType274'>{{ trafficSignType274 }}</a>
+		</li>
+    </ul>
+</div>
