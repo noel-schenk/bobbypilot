@@ -9,7 +9,7 @@ import { MlService, ClassifierTypes } from '../ml.service';
 })
 export class TrafficSignsTrainingComponent {
 	TrafficSignTypes274 = Utils.getArrayOfEnumValues(TrafficSignTypes274);
-	_274 = TrafficSignTypes274.sUndefined;
+	_274 = TrafficSignTypes274.none;
 	constructor(private MlService: MlService) {}
 
 	set s274(trafficSignTypes274: TrafficSignTypes274) {

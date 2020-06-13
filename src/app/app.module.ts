@@ -21,6 +21,8 @@ import { QuickSaveComponent } from './quick-save/quick-save.component';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
 import { TrafficSignsTrainingComponent } from './traffic-signs-training/traffic-signs-training.component';
+import { TrainWithImagesComponent } from './train-with-images/train-with-images.component';
+import { ConnectUsbComponent } from './connect-usb/connect-usb.component';
 
 @NgModule({
 	declarations: [
@@ -38,13 +40,15 @@ import { TrafficSignsTrainingComponent } from './traffic-signs-training/traffic-
 		NavigationComponent,
 		TrafficLightTrainingComponent,
 		QuickSaveComponent,
-		TrafficSignsTrainingComponent
+		TrafficSignsTrainingComponent,
+		TrainWithImagesComponent,
+		ConnectUsbComponent
 	],
 	imports: [
 		BrowserModule,
 		AppRoutingModule,
 		RouterModule.forRoot([
-			{path: '', component: DashboardComponent, resolve: {myData: MlService}},
+			{path: '', component: DashboardComponent, resolve: {mlService: MlService}},
 		]),
 		ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production, registrationStrategy: 'registerImmediately' })
 	],

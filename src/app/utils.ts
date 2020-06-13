@@ -40,6 +40,12 @@ export default class Utils {
 		return Object.keys(enumObject).filter((type) => isNaN(<any>type) && type !== 'values').map(x => x.valueOf());
 	}
 
+	static logPromiseError(promise: Promise<any>) {
+		promise.catch(error => {
+			console.error(error);
+		});
+	}
+
 }
 
 export class byRef<T>{

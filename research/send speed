@@ -69,7 +69,8 @@ navigator.usb.requestDevice({
     return device.open()
         .then(() => device.reset())
         .then(() => device.selectConfiguration(1))
-        .then(() => device.claimInterface(device.configuration.interfaces[0].interfaceNumber))
+		.then(() => device.claimInterface(device.configuration.interfaces[0].interfaceNumber))
+		.then(() => device.claimInterface(device.configuration.interfaces[1].interfaceNumber))
         .then(() => {
 			y = device;
 			testing();
@@ -219,14 +220,12 @@ function sleep(ms) {
   
 
 
-// ffff9e024d8e0cc0 2871730143 S             Co:                               1:         028:          0        s      40                  01        0008    0000  0000   0
-// address          timestampp SendOrReceive ControlOrNot(big)direction(small) bus number device number endpoint status reqAndRecTypeNumber 0xrequest 0xvalue index length lenght but weird
 
 async function testing() {
 	let res;
 
 
-
+/*
 	res = await ci(0x80, 0x06, 0x0100, 0x0000, 0x0012);
 	console.log('initRes100: ', res);
 
@@ -359,19 +358,33 @@ async function testing() {
 	await sleep(2000);
 
 	res = await bo(2, stringToAT('MA'));
-	console.log('ATMA: ', res);
+	console.log('ATMA: ', res);*/
+
+	bi(2, 128).then(res => {
+		console.log('biRes: ', res);
+	});
+
+	co(0x21, 0x22, 0x0009, 0x0000);
+	co(0x21, 0x20, 0x0000, 0x0000, [0x00960000, 0x000008]);
+
+	bo(2, stringToAT('ATI'));
 	
 }
 
 
 
+// ffff9e024d8e0cc0 2871730143 S             Co:                               1:         028:          0        s      40                  01        0008    0000  0000   0
+// address          timestampp SendOrReceive ControlOrNot(big)direction(small) bus number device number endpoint status reqAndRecTypeNumber 0xrequest 0xvalue index length lenght but weird
 
 
 
+ffff945770f6d240 3121544267 S Bi:1:010:2 -115 128 <
 
 
+ffff9457a18eed80 3123620161 C Bi:1:010:2 0 21 = 4154490d 0a454c4d 33323720 76322e31 0d0a0d0a 3e
+ffff9457a18eed80 3123620212 S Bi:1:010:2 -115 128 <
 
-
+ffff945770f6db40 3123619947 S Bo:1:010:2 -115 4 = 4154490d
 
 
 
